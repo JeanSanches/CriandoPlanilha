@@ -1,0 +1,10 @@
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\bin\Debug\CriadorPlanilhas.exe.config
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\bin\Debug\CriadorPlanilhas.exe
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\bin\Debug\CriadorPlanilhas.pdb
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.csprojAssemblyReference.cache
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.Form1.resources
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.Properties.Resources.resources
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.csproj.GenerateResource.cache
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.csproj.CoreCompileInputs.cache
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.exe
+D:\Projetos\CriadorPlanilhas\CriadorPlanilhas\obj\Debug\CriadorPlanilhas.pdb
