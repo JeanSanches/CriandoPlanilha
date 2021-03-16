@@ -1,6 +1,12 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using OfficeOpenXml.Drawing;
+using OfficeOpenXml.Drawing.Chart;
+using OfficeOpenXml.Style;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -29,6 +35,23 @@ namespace CriadorPlanilhas
             dgvDados.Rows.Clear();
 
             var index = 0;
+            var diaMaximoMes = DateTime.DaysInMonth(dtpReferencia.Value.Year, dtpReferencia.Value.Month);
+            var folgas = (diaMaximoMes / 4) - 2 - 2;
+
+            var diaFolgaDupla = 1;
+            var diaSemanaFolga = "";
+            var domingos = new List<int>();
+
+            do
+            {
+                diaFolgaDupla = new Random().Next(1, diaMaximoMes - 1);
+                var dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, diaFolgaDupla);
+                diaSemanaFolga = dateValue.ToString("dddd", new CultureInfo("pt-BR"));
+
+                Thread.Sleep(tempoPausa);
+            }
+            while (diaSemanaFolga == "domingo");
+
 
             foreach (var dia in GetDias(dtpReferencia.Value.Year, dtpReferencia.Value.Month))
             {
@@ -36,15 +59,64 @@ namespace CriadorPlanilhas
                 var diaSemana = dateValue.ToString("dddd", new CultureInfo("pt-BR"));
                 index = dgvDados.Rows.Add();
                 dgvDados.Rows[index].Cells["Dia"].Value = dia + "  |  " + diaSemana;
+                dgvDados.Rows[index].Cells["Entrada"].Value = "";
 
-                if (diaSemana != "domingo")
+                if (diaSemana == "domingo")
+                    domingos.Add(dia);
+            }
+
+            for (var x = 0; x < 2; x++)
+            {
+                var folgaDomingoIndex = new Random().Next(1, domingos.Count);
+                dgvDados.Rows[domingos[folgaDomingoIndex] - 1].Cells["Entrada"].Value = "-";
+                domingos.RemoveAt(folgaDomingoIndex);
+
+                Thread.Sleep(tempoPausa);
+            }
+
+            for (index = 0; index < dgvDados.Rows.Count; index++)
+            {
+                DateTime dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, index + 1);
+                var diaSemana = dateValue.ToString("dddd", new CultureInfo("pt-BR"));
+
+                if (diaFolgaDupla == (index + 1))
+                {
+                    var i = 1;
+
+                    if (diaSemana == "sábado")
+                        i = -1;
+
+                    dgvDados.Rows[index].Cells["Entrada"].Value = "-";
+                    dgvDados.Rows[index + i].Cells["Entrada"].Value = "-";
+                }
+            }
+
+            for (; folgas > 0; folgas--)
+            {
+                var diaFolga = 0;
+                do
+                {
+                    diaFolga = new Random().Next(1, diaMaximoMes - 1);
+                    var dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, diaFolga);
+                    diaSemanaFolga = dateValue.ToString("dddd", new CultureInfo("pt-BR"));
+
+                    Thread.Sleep(tempoPausa);
+                }
+                while (diaSemanaFolga == "domingo" || dgvDados.Rows[diaFolga -1].Cells["Entrada"].Value.ToString().Equals("-"));
+
+                dgvDados.Rows[diaFolga - 1].Cells["Entrada"].Value = "-";
+            }
+
+            for (index = 0; index < dgvDados.Rows.Count; index++)
+            {
+                if (!dgvDados.Rows[index].Cells["Entrada"].Value.ToString().Equals("-"))
                 {
                     dgvDados.Rows[index].Cells["Entrada"].Value = GerarHoraInicial(index);
                     dgvDados.Rows[index].Cells["IntervaloInicial"].Value = GerarIntervaloInicial(index);
                     dgvDados.Rows[index].Cells["IntervaloFinal"].Value = GerarIntervaloFinal(index);
-                    dgvDados.Rows[index].Cells["HoraExtra"].Value = "0";
+                    dgvDados.Rows[index].Cells["HoraExtra"].Value = "-";
                     dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value = "0";
-                    dgvDados.Rows[index].Cells["TempoEspera"].Value = "0";
+                    dgvDados.Rows[index].Cells["TempoEspera"].Value = "-";
                     dgvDados.Rows[index].Cells["TempoEsperaMinutos"].Value = "0";
                 }
                 else
@@ -58,13 +130,13 @@ namespace CriadorPlanilhas
                     dgvDados.Rows[index].Cells["TempoEsperaMinutos"].Value = "-";
                 }
 
-
                 Thread.Sleep(tempoPausa);
             }
 
-            CalcularValoresAleatorios(Convert.ToInt32(txtHoraExtra.Text) * 60 + Convert.ToInt32(txtMinutoExtra.Text), "HoraExtra", "HoraExtraMinutos");
 
-            CalcularValoresAleatorios(Convert.ToInt32(txtHoraEspera.Text) * 60 + Convert.ToInt32(txtMinutoEspera.Text), "TempoEspera", "TempoEsperaMinutos");
+            CalcularValoresAleatorios(Convert.ToInt32(txtHoraExtra.Text) * 60 + Convert.ToInt32(txtMinutoExtra.Text), "HoraExtra", "HoraExtraMinutos", 1, 120, 120);
+
+            CalcularValoresAleatorios(Convert.ToInt32(txtHoraEspera.Text) * 60 + Convert.ToInt32(txtMinutoEspera.Text), "TempoEspera", "TempoEsperaMinutos", 180, 300, 300);
 
             for (index = 0; index < dgvDados.Rows.Count; index++)
             {
@@ -81,11 +153,21 @@ namespace CriadorPlanilhas
                 }
             }
 
+            VerificarEReaplicarValores("HoraExtraMinutos", 7);
+
             CorrecaoInterJornada();
 
             GerarTotatais();
 
             dgvDados.Enabled = true;
+            btnExportar.Enabled = true;
+        }
+
+        private void VerificarEReaplicarValores(string chave, int valorMinimoDias)
+        {
+            foreach (var dia in GetDias(dtpReferencia.Value.Year, dtpReferencia.Value.Month))
+            {
+            }
         }
 
         private void GerarTotatais()
@@ -205,11 +287,11 @@ namespace CriadorPlanilhas
 
                             dgvDados.Rows[index].Cells["IntervaloInterJornada"].Value = TraduzirMinutosTotal(value);
                         }
-                        else     
+                        else
                             dgvDados.Rows[index].Cells["IntervaloInterJornada"].Value = "-";
-                        
+
                 }
-                else             
+                else
                     dgvDados.Rows[index].Cells["IntervaloInterJornada"].Value = "-";
 
                 Thread.Sleep(tempoPausa);
@@ -249,7 +331,7 @@ namespace CriadorPlanilhas
              .AddMinutes(Convert.ToInt32(dgvDados.Rows[index].Cells["TempoEsperaMinutos"].Value));
         }
 
-        private string CalcularValorAleatorio(int index, ref int valor, string chave, int max)
+        private string CalcularValorAleatorio(int index, ref int valor, string chave, int min, int max, int valorMax)
         {
             if (!dgvDados.Rows[index].Cells[chave].Value.Equals("-"))
             {
@@ -257,11 +339,11 @@ namespace CriadorPlanilhas
 
                 if (possuiHorasExtras == 1 || possuiHorasExtras == 2)
                 {
-                    var horas = new Random().Next(1, max);
+                    var horas = new Random().Next(min, max);
 
                     var valorFinal = Convert.ToInt32(dgvDados.Rows[index].Cells[chave].Value) + horas;
 
-                    if (valorFinal <= 120)
+                    if (valorFinal <= valorMax)
                     {
                         valor -= horas;
 
@@ -284,11 +366,10 @@ namespace CriadorPlanilhas
             return "-";
         }
 
-        private void CalcularValoresAleatorios(int totalHoras, string chaveVisivel, string chaveCalculo)
+        private void CalcularValoresAleatorios(int totalHoras, string chaveVisivel, string chaveCalculo, int min, int max, int valorMax)
         {
             var index = 0;
             var rodadas = 0;
-            var max = 120;
 
             while (totalHoras > 0)
             {
@@ -304,7 +385,7 @@ namespace CriadorPlanilhas
                     }
                 }
 
-                dgvDados.Rows[index].Cells[chaveCalculo].Value = CalcularValorAleatorio(index, ref totalHoras, chaveCalculo, max);
+                dgvDados.Rows[index].Cells[chaveCalculo].Value = CalcularValorAleatorio(index, ref totalHoras, chaveCalculo, min, max, valorMax);
                 dgvDados.Rows[index].Cells[chaveVisivel].Value = TraduzirMinutos(index, chaveCalculo);
 
                 index++;
@@ -350,5 +431,111 @@ namespace CriadorPlanilhas
                 dgvDados.Rows[index].Cells["TotalTrabalhadoMinutos"].Value = "-";
             }
         }
+
+        private void btnExportar_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtNomeArquivo.Text))
+            {
+                using (var folderBrowserDialog = new FolderBrowserDialog())
+                {
+                    if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        Exportar(folderBrowserDialog.SelectedPath);
+                    }
+
+                }
+            }
+            else { MessageBox.Show("O nome do arquivo deve ser informado"); }
+        }
+
+        private void Exportar(string diretorio)
+        {
+            FileInfo newFile = new FileInfo(@"d:\test.xlsx");
+            if (newFile.Exists)
+            {
+                newFile.Delete();
+                newFile = new FileInfo(@"d:\test.xlsx");
+
+            }
+            using (ExcelPackage package = new ExcelPackage(newFile))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Planilha");
+
+                worksheet.Cells.Style.WrapText = true;
+                worksheet.View.ShowGridLines = false;//Remove the grid lines of the sheet
+
+                worksheet.Cells["A1:G1"].Merge = true;
+
+                DateTime dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, dtpReferencia.Value.Day);
+
+                worksheet.Cells[1, 1].Value = dateValue.ToString("MMMM", new CultureInfo("pt-BR")).ToUpper();
+
+                worksheet.Cells["A2:b2"].Merge = true;
+
+                worksheet.Cells[2, 3].Value = "Entrada";
+                worksheet.Cells[2, 4].Value = "Intervalo / Parada Obrigatória";
+                worksheet.Cells[2, 5].Value = "Saida";
+                worksheet.Cells[2, 6].Value = "Tempo de Espera";
+                worksheet.Cells[2, 7].Value = "Hora Extra";
+                var index = 0;
+
+                for (var coluna = 1; coluna <= 7; coluna++)
+                {
+                    worksheet.Cells[1, coluna].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.FromArgb(191, 191, 191));
+                    worksheet.Cells[2, coluna].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.FromArgb(191, 191, 191));
+                }
+
+                for (; index < dgvDados.Rows.Count; index++)
+                {
+                    var data = new DateTime(dateValue.Year, dateValue.Month, index + 1);
+                    worksheet.Cells[index + 3, 1].Value = (index + 1) + "/" + data.ToString("MM", new CultureInfo("pt-BR"));
+                    worksheet.Cells[index + 3, 2].Value = data.ToString("dddd", new CultureInfo("pt-BR"));
+
+                    if (!dgvDados.Rows[index].Cells["Entrada"].Value.Equals("-"))
+                    {
+                        worksheet.Cells[index + 3, 3].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["Entrada"].Value).ToString("HH:mm");
+                        worksheet.Cells[index + 3, 4].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["IntervaloInicial"].Value).ToString("HH:mm") + "/" + Convert.ToDateTime(dgvDados.Rows[index].Cells["IntervaloFinal"].Value).ToString("HH:mm");
+                        worksheet.Cells[index + 3, 5].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["Saida"].Value).ToString("HH:mm");
+
+                        worksheet.Cells[index + 3, 6].Value = dgvDados.Rows[index].Cells["TempoEspera"].Value;
+                        if (!dgvDados.Rows[index].Cells["TempoEspera"].Value.Equals("-"))
+                        {
+                            worksheet.Cells[index + 3, 6].Value = dgvDados.Rows[index].Cells["TempoEspera"].Value;
+                        }
+
+                        worksheet.Cells[index + 3, 7].Value = dgvDados.Rows[index].Cells["HoraExtra"].Value;
+                        if (!dgvDados.Rows[index].Cells["HoraExtra"].Value.Equals("-"))
+                        {
+                            worksheet.Cells[index + 3, 7].Value = dgvDados.Rows[index].Cells["HoraExtra"].Value;
+                        }
+                    }
+                    else
+                    {
+                        using (ExcelRange range = worksheet.Cells[index + 3, 1, index + 3, 7])
+                        {
+                            range.Style.Font.Bold = true;
+                            range.Style.Font.Color.SetColor(Color.White);
+                            range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                            range.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(128, 128, 128));
+                        }
+                    }
+
+                    for (var coluna = 1; coluna <= 7; coluna++)
+                        worksheet.Cells[index + 3, coluna].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.FromArgb(191, 191, 191));
+                }
+
+                worksheet.Cells[index + 3, 6].Value = txtTotalHoraEspera.Text;
+                worksheet.Cells[index + 3, 7].Value = txtTotalHoraExtra.Text;
+
+                using (ExcelRange range = worksheet.Cells[1, 1, index + 3, 7])
+                {
+                    range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                }
+
+                package.Save();
+            }
+        }
+
     }
 }

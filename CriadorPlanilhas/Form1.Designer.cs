@@ -35,6 +35,20 @@
             this.btnGerar = new System.Windows.Forms.Button();
             this.dtpReferencia = new System.Windows.Forms.DateTimePicker();
             this.dgvDados = new System.Windows.Forms.DataGridView();
+            this.Dia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IntervaloInterJornada = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Entrada = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IntervaloInicial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParcialTrabalhado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IntervaloFinal = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Saida = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TotalTrabalhado = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TempoEspera = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TempoEsperaMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HoraExtra = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.HoraExtraMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ParcialTrabalhadoMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TotalTrabalhadoMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnExportar = new System.Windows.Forms.Button();
             this.txtHoraExtra = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,20 +64,8 @@
             this.txtHoraEspera = new System.Windows.Forms.TextBox();
             this.txtTotalHoraEspera = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.Dia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IntervaloInterJornada = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Entrada = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IntervaloInicial = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ParcialTrabalhado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IntervaloFinal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Saida = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TotalTrabalhado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TempoEspera = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TempoEsperaMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HoraExtra = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.HoraExtraMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ParcialTrabalhadoMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TotalTrabalhadoMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtNomeArquivo = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDados)).BeginInit();
             this.SuspendLayout();
             // 
@@ -109,14 +111,102 @@
             this.dgvDados.Size = new System.Drawing.Size(1027, 537);
             this.dgvDados.TabIndex = 2;
             // 
+            // Dia
+            // 
+            this.Dia.HeaderText = "";
+            this.Dia.Name = "Dia";
+            // 
+            // IntervaloInterJornada
+            // 
+            this.IntervaloInterJornada.HeaderText = "Intervalo Inter Jornada";
+            this.IntervaloInterJornada.Name = "IntervaloInterJornada";
+            // 
+            // Entrada
+            // 
+            dataGridViewCellStyle1.Format = "t";
+            dataGridViewCellStyle1.NullValue = null;
+            this.Entrada.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Entrada.HeaderText = "Entrada";
+            this.Entrada.Name = "Entrada";
+            // 
+            // IntervaloInicial
+            // 
+            dataGridViewCellStyle2.Format = "t";
+            dataGridViewCellStyle2.NullValue = null;
+            this.IntervaloInicial.DefaultCellStyle = dataGridViewCellStyle2;
+            this.IntervaloInicial.HeaderText = "Inicial Intervalo/ Parada Obrigatória";
+            this.IntervaloInicial.Name = "IntervaloInicial";
+            // 
+            // ParcialTrabalhado
+            // 
+            this.ParcialTrabalhado.HeaderText = "Parcial Trabalhado";
+            this.ParcialTrabalhado.Name = "ParcialTrabalhado";
+            // 
+            // IntervaloFinal
+            // 
+            dataGridViewCellStyle3.Format = "t";
+            dataGridViewCellStyle3.NullValue = null;
+            this.IntervaloFinal.DefaultCellStyle = dataGridViewCellStyle3;
+            this.IntervaloFinal.HeaderText = "Final Intervalo/ Parada Obrigatória";
+            this.IntervaloFinal.Name = "IntervaloFinal";
+            // 
+            // Saida
+            // 
+            dataGridViewCellStyle4.Format = "t";
+            dataGridViewCellStyle4.NullValue = null;
+            this.Saida.DefaultCellStyle = dataGridViewCellStyle4;
+            this.Saida.HeaderText = "Saída";
+            this.Saida.Name = "Saida";
+            // 
+            // TotalTrabalhado
+            // 
+            this.TotalTrabalhado.HeaderText = "Total Trabalhado";
+            this.TotalTrabalhado.Name = "TotalTrabalhado";
+            // 
+            // TempoEspera
+            // 
+            this.TempoEspera.HeaderText = "Tempo de espera";
+            this.TempoEspera.Name = "TempoEspera";
+            // 
+            // TempoEsperaMinutos
+            // 
+            this.TempoEsperaMinutos.HeaderText = "TempoEsperaMinutos";
+            this.TempoEsperaMinutos.Name = "TempoEsperaMinutos";
+            this.TempoEsperaMinutos.Visible = false;
+            // 
+            // HoraExtra
+            // 
+            this.HoraExtra.HeaderText = "Hora Extra";
+            this.HoraExtra.Name = "HoraExtra";
+            // 
+            // HoraExtraMinutos
+            // 
+            this.HoraExtraMinutos.HeaderText = "HoraExtraMinutos";
+            this.HoraExtraMinutos.Name = "HoraExtraMinutos";
+            this.HoraExtraMinutos.Visible = false;
+            // 
+            // ParcialTrabalhadoMinutos
+            // 
+            this.ParcialTrabalhadoMinutos.HeaderText = "TotalTrabalhadoMinutos";
+            this.ParcialTrabalhadoMinutos.Name = "ParcialTrabalhadoMinutos";
+            this.ParcialTrabalhadoMinutos.Visible = false;
+            // 
+            // TotalTrabalhadoMinutos
+            // 
+            this.TotalTrabalhadoMinutos.HeaderText = "TotalTrabalhadoMinutos";
+            this.TotalTrabalhadoMinutos.Name = "TotalTrabalhadoMinutos";
+            this.TotalTrabalhadoMinutos.Visible = false;
+            // 
             // btnExportar
             // 
+            this.btnExportar.Enabled = false;
             this.btnExportar.Location = new System.Drawing.Point(880, 655);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(159, 32);
             this.btnExportar.TabIndex = 3;
             this.btnExportar.Text = "Exportar";
             this.btnExportar.UseVisualStyleBackColor = true;
+            this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
             // 
             // txtHoraExtra
             // 
@@ -234,97 +324,29 @@
             this.label8.TabIndex = 16;
             this.label8.Text = "Total Horas Espera";
             // 
-            // Dia
+            // txtNomeArquivo
             // 
-            this.Dia.HeaderText = "";
-            this.Dia.Name = "Dia";
+            this.txtNomeArquivo.Location = new System.Drawing.Point(692, 662);
+            this.txtNomeArquivo.Name = "txtNomeArquivo";
+            this.txtNomeArquivo.Size = new System.Drawing.Size(167, 20);
+            this.txtNomeArquivo.TabIndex = 18;
             // 
-            // IntervaloInterJornada
+            // label9
             // 
-            this.IntervaloInterJornada.HeaderText = "Intervalo Inter Jornada";
-            this.IntervaloInterJornada.Name = "IntervaloInterJornada";
-            // 
-            // Entrada
-            // 
-            dataGridViewCellStyle1.Format = "t";
-            dataGridViewCellStyle1.NullValue = null;
-            this.Entrada.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Entrada.HeaderText = "Entrada";
-            this.Entrada.Name = "Entrada";
-            // 
-            // IntervaloInicial
-            // 
-            dataGridViewCellStyle2.Format = "t";
-            dataGridViewCellStyle2.NullValue = null;
-            this.IntervaloInicial.DefaultCellStyle = dataGridViewCellStyle2;
-            this.IntervaloInicial.HeaderText = "Inicial Intervalo/ Parada Obrigatória";
-            this.IntervaloInicial.Name = "IntervaloInicial";
-            // 
-            // ParcialTrabalhado
-            // 
-            this.ParcialTrabalhado.HeaderText = "Parcial Trabalhado";
-            this.ParcialTrabalhado.Name = "ParcialTrabalhado";
-            // 
-            // IntervaloFinal
-            // 
-            dataGridViewCellStyle3.Format = "t";
-            dataGridViewCellStyle3.NullValue = null;
-            this.IntervaloFinal.DefaultCellStyle = dataGridViewCellStyle3;
-            this.IntervaloFinal.HeaderText = "Final Intervalo/ Parada Obrigatória";
-            this.IntervaloFinal.Name = "IntervaloFinal";
-            // 
-            // Saida
-            // 
-            dataGridViewCellStyle4.Format = "t";
-            dataGridViewCellStyle4.NullValue = null;
-            this.Saida.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Saida.HeaderText = "Saída";
-            this.Saida.Name = "Saida";
-            // 
-            // TotalTrabalhado
-            // 
-            this.TotalTrabalhado.HeaderText = "Total Trabalhado";
-            this.TotalTrabalhado.Name = "TotalTrabalhado";
-            // 
-            // TempoEspera
-            // 
-            this.TempoEspera.HeaderText = "Tempo de espera";
-            this.TempoEspera.Name = "TempoEspera";
-            // 
-            // TempoEsperaMinutos
-            // 
-            this.TempoEsperaMinutos.HeaderText = "TempoEsperaMinutos";
-            this.TempoEsperaMinutos.Name = "TempoEsperaMinutos";
-            this.TempoEsperaMinutos.Visible = false;
-            // 
-            // HoraExtra
-            // 
-            this.HoraExtra.HeaderText = "Hora Extra";
-            this.HoraExtra.Name = "HoraExtra";
-            // 
-            // HoraExtraMinutos
-            // 
-            this.HoraExtraMinutos.HeaderText = "HoraExtraMinutos";
-            this.HoraExtraMinutos.Name = "HoraExtraMinutos";
-            this.HoraExtraMinutos.Visible = false;
-            // 
-            // ParcialTrabalhadoMinutos
-            // 
-            this.ParcialTrabalhadoMinutos.HeaderText = "TotalTrabalhadoMinutos";
-            this.ParcialTrabalhadoMinutos.Name = "ParcialTrabalhadoMinutos";
-            this.ParcialTrabalhadoMinutos.Visible = false;
-            // 
-            // TotalTrabalhadoMinutos
-            // 
-            this.TotalTrabalhadoMinutos.HeaderText = "TotalTrabalhadoMinutos";
-            this.TotalTrabalhadoMinutos.Name = "TotalTrabalhadoMinutos";
-            this.TotalTrabalhadoMinutos.Visible = false;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(689, 646);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(74, 13);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "Nome Arquivo";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1052, 689);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.txtNomeArquivo);
             this.Controls.Add(this.txtTotalHoraEspera);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label5);
@@ -384,6 +406,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn HoraExtraMinutos;
         private System.Windows.Forms.DataGridViewTextBoxColumn ParcialTrabalhadoMinutos;
         private System.Windows.Forms.DataGridViewTextBoxColumn TotalTrabalhadoMinutos;
+        private System.Windows.Forms.TextBox txtNomeArquivo;
+        private System.Windows.Forms.Label label9;
     }
 }
 
