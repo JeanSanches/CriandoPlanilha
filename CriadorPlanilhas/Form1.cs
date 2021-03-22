@@ -543,11 +543,11 @@ namespace CriadorPlanilhas
 
         private void Exportar(string diretorio)
         {
-            FileInfo newFile = new FileInfo(@"d:\test.xlsx");
+            FileInfo newFile = new FileInfo(@"" + diretorio + txtNomeArquivo.Text + ".xlsx");
             if (newFile.Exists)
             {
                 newFile.Delete();
-                newFile = new FileInfo(@"d:\test.xlsx");
+                newFile = new FileInfo(@"" + diretorio + txtNomeArquivo.Text + ".xlsx");
 
             }
 
