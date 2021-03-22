@@ -108,7 +108,7 @@
             this.dgvDados.Enabled = false;
             this.dgvDados.Location = new System.Drawing.Point(12, 53);
             this.dgvDados.Name = "dgvDados";
-            this.dgvDados.Size = new System.Drawing.Size(1027, 537);
+            this.dgvDados.Size = new System.Drawing.Size(1079, 537);
             this.dgvDados.TabIndex = 2;
             // 
             // Dia
@@ -200,7 +200,7 @@
             // btnExportar
             // 
             this.btnExportar.Enabled = false;
-            this.btnExportar.Location = new System.Drawing.Point(880, 655);
+            this.btnExportar.Location = new System.Drawing.Point(920, 656);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(159, 32);
             this.btnExportar.TabIndex = 3;
@@ -252,7 +252,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(935, 602);
+            this.label4.Location = new System.Drawing.Point(975, 603);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(94, 13);
             this.label4.TabIndex = 9;
@@ -261,7 +261,7 @@
             // txtTotalHoraExtra
             // 
             this.txtTotalHoraExtra.Enabled = false;
-            this.txtTotalHoraExtra.Location = new System.Drawing.Point(939, 619);
+            this.txtTotalHoraExtra.Location = new System.Drawing.Point(979, 620);
             this.txtTotalHoraExtra.Name = "txtTotalHoraExtra";
             this.txtTotalHoraExtra.Size = new System.Drawing.Size(100, 20);
             this.txtTotalHoraExtra.TabIndex = 10;
@@ -310,7 +310,7 @@
             // txtTotalHoraEspera
             // 
             this.txtTotalHoraEspera.Enabled = false;
-            this.txtTotalHoraEspera.Location = new System.Drawing.Point(823, 619);
+            this.txtTotalHoraEspera.Location = new System.Drawing.Point(863, 620);
             this.txtTotalHoraEspera.Name = "txtTotalHoraEspera";
             this.txtTotalHoraEspera.Size = new System.Drawing.Size(100, 20);
             this.txtTotalHoraEspera.TabIndex = 17;
@@ -318,7 +318,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(819, 602);
+            this.label8.Location = new System.Drawing.Point(859, 603);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(98, 13);
             this.label8.TabIndex = 16;
@@ -326,7 +326,7 @@
             // 
             // txtNomeArquivo
             // 
-            this.txtNomeArquivo.Location = new System.Drawing.Point(692, 662);
+            this.txtNomeArquivo.Location = new System.Drawing.Point(732, 663);
             this.txtNomeArquivo.Name = "txtNomeArquivo";
             this.txtNomeArquivo.Size = new System.Drawing.Size(167, 20);
             this.txtNomeArquivo.TabIndex = 18;
@@ -334,7 +334,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(689, 646);
+            this.label9.Location = new System.Drawing.Point(729, 647);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(74, 13);
             this.label9.TabIndex = 19;
@@ -344,7 +344,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1052, 689);
+            this.ClientSize = new System.Drawing.Size(1103, 689);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.txtNomeArquivo);
             this.Controls.Add(this.txtTotalHoraEspera);
