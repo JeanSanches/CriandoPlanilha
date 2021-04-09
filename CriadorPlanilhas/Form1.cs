@@ -192,6 +192,7 @@ namespace CriadorPlanilhas
 
         private void ValidarHorasExtras()
         {
+            var totalTentativas = 0;
             var diasTrabalho = new List<int>();
             var quantidadeExtrasNaoAplicadas = 0;
             for (var index = 0; index < dgvDados.Rows.Count; index++)
@@ -207,6 +208,8 @@ namespace CriadorPlanilhas
 
             while (quantidadeExtrasNaoAplicadas < 7)
             {
+                totalTentativas = 0;
+
                 var diaTirarExtra = new Random().Next(1, diasTrabalho.Count);
 
                 Thread.Sleep(tempoPausa);
@@ -255,6 +258,10 @@ namespace CriadorPlanilhas
                             dgvDados.Rows[indexExtraAdd].Cells["HoraExtra"].Value = TraduzirMinutosTotal(totalHoras);
                         }
 
+                        totalTentativas++;
+
+                        if (totalTentativas >= 200)
+                            break;
                     }
 
                     quantidadeExtrasNaoAplicadas++;
@@ -459,7 +466,6 @@ namespace CriadorPlanilhas
         {
             var index = 0;
             var rodadas = 0;
-
             while (totalHoras > 0)
             {
 
@@ -468,9 +474,13 @@ namespace CriadorPlanilhas
                     index = 0;
                     rodadas++;
 
-                    if (rodadas == 15)
+                    if (rodadas >= 3)
                     {
-                        max = Convert.ToInt32(Math.Ceiling((decimal)totalHoras / 10));
+                        max = Convert.ToInt32(Math.Ceiling((decimal)totalHoras / 7));
+
+                        if (max > 120)
+                            max = 120;
+
                         rodadas = 0;
                     }
                 }
@@ -591,7 +601,7 @@ namespace CriadorPlanilhas
                 for (; index < dgvDados.Rows.Count; index++)
                 {
                     var data = new DateTime(dateValue.Year, dateValue.Month, index + 1);
-                    worksheet.Cells[index + 3, 1].Value = (index + 1) + "/" + data.ToString("MM", new CultureInfo("pt-BR"));                
+                    worksheet.Cells[index + 3, 1].Value = (index + 1) + "/" + data.ToString("MM", new CultureInfo("pt-BR"));
                     worksheet.Cells[index + 3, 2].Value = data.ToString("dddd", new CultureInfo("pt-BR"));
                     worksheet.Cells[index + 3, 2].AutoFitColumns(30, 40);
 
