@@ -16,7 +16,6 @@ namespace CriadorPlanilhas
     public partial class Form1 : Form
     {
         private int tempoPausa = 20;
-        private Dictionary<int, List<int>> semanaCalculada;
 
         public Form1()
         {
@@ -35,27 +34,13 @@ namespace CriadorPlanilhas
         private void btnGerar_Click(object sender, EventArgs e)
         {
             dgvDados.Rows.Clear();
-            semanaCalculada = new Dictionary<int, List<int>>();
 
             var index = 0;
             var diaMaximoMes = DateTime.DaysInMonth(dtpReferencia.Value.Year, dtpReferencia.Value.Month);
             var diasTrabalhados = 0;
-            var diaFolgaDupla = 1;
-            var diaSemanaFolga = "";
             var domingos = new List<int>();
+            var sabados = new List<int>();
 
-            do
-            {
-                diaFolgaDupla = new Random().Next(1, diaMaximoMes - 1);
-                var dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, diaFolgaDupla);
-                diaSemanaFolga = dateValue.ToString("dddd", new CultureInfo("pt-BR"));
-
-                Thread.Sleep(tempoPausa);
-            }
-            while (diaSemanaFolga == "domingo" || diaSemanaFolga == "sábado");
-
-            var diasSemana = new List<int>();
-            var semana = 1;
             foreach (var dia in GetDias(dtpReferencia.Value.Year, dtpReferencia.Value.Month))
             {
                 DateTime dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, dia);
@@ -64,73 +49,32 @@ namespace CriadorPlanilhas
                 dgvDados.Rows[index].Cells["Dia"].Value = dia + "  |  " + diaSemana;
                 dgvDados.Rows[index].Cells["Entrada"].Value = "";
 
-                if (diaSemana != "domingo" && diaSemana != "sábado")
-                    diasSemana.Add(dia);
-
                 if (diaSemana == "domingo")
-                {
                     domingos.Add(dia);
 
-                    if (!diasSemana.Contains(diaFolgaDupla))
-                    {
-                        semanaCalculada.Add(semana, diasSemana.ToList());
-                        semana++;
-                    }
+                if (diaSemana == "sábado")
+                    sabados.Add(dia);
 
-                    diasSemana.Clear();
-                }
             }
 
-            for (var x = domingos.Count; x > 0 ; x--)
+            for (var x = domingos.Count; x > 0; x--)
             {
-                dgvDados.Rows[domingos[x-1] - 1].Cells["Entrada"].Value = "-";
+                dgvDados.Rows[domingos[x - 1] - 1].Cells["Entrada"].Value = "-";
             }
 
-            var folgas = (diaMaximoMes / 4) - 2 - domingos.Count();
-
-            for (index = 0; index < dgvDados.Rows.Count; index++)
-            {
-                DateTime dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, index + 1);
-                var diaSemana = dateValue.ToString("dddd", new CultureInfo("pt-BR"));
-
-                if (diaFolgaDupla == (index + 1))
-                {
-                    var i = 1;
-
-                    if (diaSemana == "sexta-feira" && i > 0)
-                        i = -1;
-
-                    dgvDados.Rows[index].Cells["Entrada"].Value = "-";
-                    dgvDados.Rows[index + i].Cells["Entrada"].Value = "-";
-
-                }
-            }
+            var folgas = 6 - domingos.Count();
 
             for (; folgas > 0; folgas--)
             {
-                var semanaFolga = 0;
-                var diaFolga = 0;
-                var chave = 0;
-                do
-                {
-                    semanaFolga = new Random().Next(1, semanaCalculada.Count);
+                var diaFolga = new Random().Next(1, sabados.Count());
 
-                    Thread.Sleep(tempoPausa);
+                Thread.Sleep(tempoPausa);
 
-                    chave = semanaCalculada.Keys.ToList()[semanaFolga - 1];
+                var sabadoSelecionado = sabados[diaFolga - 1];
 
-                    var listaSemana = semanaCalculada[chave];
-                    diaFolga = new Random().Next(listaSemana.Min(), listaSemana.Max());
+                dgvDados.Rows[sabadoSelecionado - 1].Cells["Entrada"].Value = "-";
 
-                    Thread.Sleep(tempoPausa);
-                }
-                while (dgvDados.Rows[diaFolga - 1].Cells["Entrada"].Value.ToString().Equals("-")
-                || (diaFolga >= 2 && dgvDados.Rows[diaFolga - 2].Cells["Entrada"].Value.ToString().Equals("-"))
-                || (diaFolga <= diaMaximoMes && dgvDados.Rows[diaFolga].Cells["Entrada"].Value.ToString().Equals("-")));
-
-                semanaCalculada.Remove(chave);
-
-                dgvDados.Rows[diaFolga - 1].Cells["Entrada"].Value = "-";
+                sabados.Remove(sabadoSelecionado);
             }
 
             for (index = 0; index < dgvDados.Rows.Count; index++)
@@ -166,7 +110,7 @@ namespace CriadorPlanilhas
             {
                 dgvDados.Rows.Clear();
 
-                MessageBox.Show("A quantidade de hora extra informada não comporta os dias trabalhados (" + diasTrabalhados+ "), ou seja, algum dia iria ficar com mais de 2 horas extras. ");   
+                MessageBox.Show("A quantidade de hora extra informada não comporta os dias trabalhados (" + diasTrabalhados + "), ou seja, algum dia iria ficar com mais de 2 horas extras. ");
                 return;
             }
 
@@ -267,7 +211,7 @@ namespace CriadorPlanilhas
 
                         totalTentativas++;
 
-                        if (totalTentativas >= 200)
+                        if (totalTentativas >= 60)
                         {
                             dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value = horaExtra;
                             dgvDados.Rows[index].Cells["HoraExtra"].Value = TraduzirMinutosTotal(horaExtra);
