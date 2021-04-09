@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -66,6 +67,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.txtNomeArquivo = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.lbTempoExecucao = new System.Windows.Forms.Label();
+            this.timerGerarPlanilha = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDados)).BeginInit();
             this.SuspendLayout();
             // 
@@ -340,11 +343,24 @@
             this.label9.TabIndex = 19;
             this.label9.Text = "Nome Arquivo";
             // 
+            // lbTempoExecucao
+            // 
+            this.lbTempoExecucao.AutoSize = true;
+            this.lbTempoExecucao.Location = new System.Drawing.Point(13, 647);
+            this.lbTempoExecucao.Name = "lbTempoExecucao";
+            this.lbTempoExecucao.Size = new System.Drawing.Size(0, 13);
+            this.lbTempoExecucao.TabIndex = 20;
+            // 
+            // timerGerarPlanilha
+            // 
+            this.timerGerarPlanilha.Tick += new System.EventHandler(this.timerGerarPlanilha_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1103, 689);
+            this.Controls.Add(this.lbTempoExecucao);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.txtNomeArquivo);
             this.Controls.Add(this.txtTotalHoraEspera);
@@ -408,6 +424,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TotalTrabalhadoMinutos;
         private System.Windows.Forms.TextBox txtNomeArquivo;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label lbTempoExecucao;
+        private System.Windows.Forms.Timer timerGerarPlanilha;
     }
 }
 
