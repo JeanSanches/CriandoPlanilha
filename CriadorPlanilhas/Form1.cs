@@ -268,7 +268,12 @@ namespace CriadorPlanilhas
                         totalTentativas++;
 
                         if (totalTentativas >= 200)
+                        {
+                            dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value = horaExtra;
+                            dgvDados.Rows[index].Cells["HoraExtra"].Value = TraduzirMinutosTotal(horaExtra);
+
                             break;
+                        }
                     }
 
                     quantidadeExtrasNaoAplicadas++;
