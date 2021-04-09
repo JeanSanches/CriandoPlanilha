@@ -39,8 +39,7 @@ namespace CriadorPlanilhas
 
             var index = 0;
             var diaMaximoMes = DateTime.DaysInMonth(dtpReferencia.Value.Year, dtpReferencia.Value.Month);
-            var folgas = (diaMaximoMes / 4) - 2 - 2;
-
+            var diasTrabalhados = 0;
             var diaFolgaDupla = 1;
             var diaSemanaFolga = "";
             var domingos = new List<int>();
@@ -82,14 +81,12 @@ namespace CriadorPlanilhas
                 }
             }
 
-            for (var x = 0; x < 2; x++)
+            for (var x = domingos.Count; x > 0 ; x--)
             {
-                var folgaDomingoIndex = new Random().Next(1, domingos.Count);
-                dgvDados.Rows[domingos[folgaDomingoIndex] - 1].Cells["Entrada"].Value = "-";
-                domingos.RemoveAt(folgaDomingoIndex);
-
-                Thread.Sleep(tempoPausa);
+                dgvDados.Rows[domingos[x-1] - 1].Cells["Entrada"].Value = "-";
             }
+
+            var folgas = (diaMaximoMes / 4) - 2 - domingos.Count();
 
             for (index = 0; index < dgvDados.Rows.Count; index++)
             {
@@ -140,6 +137,7 @@ namespace CriadorPlanilhas
             {
                 if (!dgvDados.Rows[index].Cells["Entrada"].Value.ToString().Equals("-"))
                 {
+                    diasTrabalhados++;
                     dgvDados.Rows[index].Cells["Entrada"].Value = GerarHoraInicial(index);
                     dgvDados.Rows[index].Cells["IntervaloInicial"].Value = GerarIntervaloInicial(index);
                     dgvDados.Rows[index].Cells["IntervaloFinal"].Value = GerarIntervaloFinal(index);
@@ -161,9 +159,18 @@ namespace CriadorPlanilhas
 
                 Thread.Sleep(tempoPausa);
             }
+            var horasExtrasInformado = Convert.ToInt32(txtHoraExtra.Text) * 60 + Convert.ToInt32(txtMinutoExtra.Text);
+            var horasExtrasmaxima = (diasTrabalhados * 2) * 60;
 
+            if (horasExtrasInformado > horasExtrasmaxima)
+            {
+                dgvDados.Rows.Clear();
 
-            CalcularValoresAleatorios(Convert.ToInt32(txtHoraExtra.Text) * 60 + Convert.ToInt32(txtMinutoExtra.Text), "HoraExtra", "HoraExtraMinutos", 1, 120, 120);
+                MessageBox.Show("A quantidade de hora extra informada não comporta os dias trabalhados (" + diasTrabalhados+ "), ou seja, algum dia iria ficar com mais de 2 horas extras. ");   
+                return;
+            }
+
+            CalcularValoresAleatorios(horasExtrasInformado, "HoraExtra", "HoraExtraMinutos", 1, 120, 120);
             ValidarHorasExtras();
             CalcularValoresAleatorios(Convert.ToInt32(txtHoraEspera.Text) * 60 + Convert.ToInt32(txtMinutoEspera.Text), "TempoEspera", "TempoEsperaMinutos", 180, 300, 300);
 
@@ -553,11 +560,11 @@ namespace CriadorPlanilhas
 
         private void Exportar(string diretorio)
         {
-            FileInfo newFile = new FileInfo(@"" + diretorio + txtNomeArquivo.Text + ".xlsx");
+            FileInfo newFile = new FileInfo(@"" + diretorio + "\\" + txtNomeArquivo.Text + ".xlsx");
             if (newFile.Exists)
             {
                 newFile.Delete();
-                newFile = new FileInfo(@"" + diretorio + txtNomeArquivo.Text + ".xlsx");
+                newFile = new FileInfo(@"" + diretorio + "\\" + txtNomeArquivo.Text + ".xlsx");
 
             }
 
