@@ -6,7 +6,6 @@ D:\Projetos\CriandoPlanilha\CriadorPlanilhas\bin\x86\Debug\Microsoft.IO.Recyclab
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\bin\x86\Debug\System.ComponentModel.Annotations.dll
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\bin\x86\Debug\EPPlus.xml
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\bin\x86\Debug\Microsoft.IO.RecyclableMemoryStream.xml
-D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.csprojAssemblyReference.cache
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.Form1.resources
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.Properties.Resources.resources
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.csproj.GenerateResource.cache
@@ -14,3 +13,4 @@ D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.cspr
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.csproj.CopyComplete
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.exe
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.pdb
+D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.csprojAssemblyReference.cache

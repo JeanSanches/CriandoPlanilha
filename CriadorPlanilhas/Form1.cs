@@ -137,7 +137,7 @@ namespace CriadorPlanilhas
             }
 
             CalcularValoresAleatorios(horasExtrasInformado, "HoraExtra", "HoraExtraMinutos", 1, 120, 120, diasTrabalhados, diaMaximoMes);
-            ValidarHorasExtras(horasExtrasInformado, diasTrabalhados,120);
+            ValidarHorasExtras(horasExtrasInformado, diasTrabalhados, 120);
             CalcularValoresAleatorios(Convert.ToInt32(txtHoraEspera.Text) * 60 + Convert.ToInt32(txtMinutoEspera.Text), "TempoEspera", "TempoEsperaMinutos", 180, 300, 300, diasTrabalhados, diaMaximoMes);
 
             for (index = 0; index < dgvDados.Rows.Count; index++)
@@ -172,7 +172,54 @@ namespace CriadorPlanilhas
 
         private void ValidarHorasExtras(int totalHorasExtras, int diasTrabalhados, int valorMax)
         {
-            if (totalHorasExtras < (diasTrabalhados * valorMax * 0.8))
+            if (totalHorasExtras > (diasTrabalhados * valorMax * 0.7))
+            {
+                var diasSemExtra = ((diasTrabalhados * 60 * 2) - totalHorasExtras) / 60 / 2;
+
+                diasSemExtra = diasSemExtra / 2;
+
+                if (diasSemExtra > 0)
+                {
+                    var listaDias = new List<int>();
+                    var listaDiasAplicados = new List<int>();
+
+                    for (var i = 0; i < dgvDados.Rows.Count; i++)
+                    {
+                        if (!dgvDados.Rows[i].Cells["Entrada"].Value.Equals("-"))
+                        {
+                            if (dgvDados.Rows[i].Cells["HoraExtra"].Value.Equals("-"))
+                                listaDias.Add(i);
+                            else
+                                listaDiasAplicados.Add(i);
+                        }
+                    }
+
+                    while (diasSemExtra > 0)
+                    {
+                        var diaTirarExtra = new Random().Next(1, listaDiasAplicados.Count) - 1;
+                        Thread.Sleep(tempoPausa);
+                        var diaColocar = new Random().Next(1, listaDias.Count) - 1;
+                        Thread.Sleep(tempoPausa);
+
+                        var valorExtra = Convert.ToInt32(dgvDados.Rows[listaDiasAplicados[diaTirarExtra]].Cells["HoraExtraMinutos"].Value);
+
+                        var valorAplicar = new Random().Next(40, valorExtra - 20) ;
+
+                        dgvDados.Rows[listaDiasAplicados[diaTirarExtra]].Cells["HoraExtraMinutos"].Value = valorExtra - valorAplicar;
+                        dgvDados.Rows[listaDiasAplicados[diaTirarExtra]].Cells["HoraExtra"].Value = TraduzirMinutosTotal(valorExtra - valorAplicar);
+
+                        dgvDados.Rows[listaDias[diaColocar]].Cells["HoraExtraMinutos"].Value = valorAplicar;
+                        dgvDados.Rows[listaDias[diaColocar]].Cells["HoraExtra"].Value = TraduzirMinutosTotal(valorAplicar);
+
+
+                        listaDiasAplicados.RemoveAt(diaTirarExtra);
+                        listaDias.RemoveAt(diaColocar);
+
+                        diasSemExtra--;
+                    }
+                }
+            }
+            else
             {
                 var totalTentativas = 0;
                 var diasTrabalho = new List<int>();
@@ -411,8 +458,7 @@ namespace CriadorPlanilhas
 
             var horaFinal = intervaloFinal.AddMinutes((8 * 60) - horaTrabalhadaAteIntervalo);
 
-            return horaFinal.AddMinutes(Convert.ToInt32(dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value))
-             .AddMinutes(Convert.ToInt32(dgvDados.Rows[index].Cells["TempoEsperaMinutos"].Value));
+            return horaFinal.AddMinutes(Convert.ToInt32(dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value));
         }
 
         private string CalcularValorAleatorio(int index, ref int valor, string chave, int min, int max, int valorMax)
@@ -470,6 +516,8 @@ namespace CriadorPlanilhas
                     do
                     {
                         diaEscolhido = new Random().Next(1, diaMaximoMes);
+
+                        Thread.Sleep(tempoPausa);
                     } while (dgvDados.Rows[diaEscolhido - 1].Cells["Entrada"].Value.Equals("-"));
 
                     listaDiasSem.Add(diaEscolhido);
