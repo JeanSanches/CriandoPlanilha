@@ -156,6 +156,8 @@ namespace CriadorPlanilhas
                 }
             }
 
+            AplicarEntraMaisTarde(diaMaximoMes);
+
             CorrecaoInterJornada();
 
             GerarTotatais();
@@ -169,6 +171,37 @@ namespace CriadorPlanilhas
             lbTempoExecucao.Text = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
 
             btnGerar.Enabled = true;
+        }
+
+        private void AplicarEntraMaisTarde(int diaMaximoMes)
+        {
+            var qtde = new Random().Next(2) + 1;
+            var diasAplicados = new List<int>(); 
+
+            while (qtde > 0)
+            {
+                var index = 0;
+                do
+                {
+                    index = new Random().Next(diaMaximoMes);
+                } while (dgvDados.Rows[index].Cells["Entrada"].Value.Equals("-") || diasAplicados.Exists(d => d == index));
+
+                diasAplicados.Add(index);
+
+                var entrada = new Random().Next(1, 60);
+
+                var entradaDia = Convert.ToDateTime(dgvDados.Rows[index].Cells["Entrada"].Value);
+                var novaentrada = new DateTime(entradaDia.Year, entradaDia.Month, entradaDia.Day, 0, 0, 0).AddHours(13).AddMinutes(entrada);
+
+                var diferenca = (novaentrada - entradaDia).TotalMinutes;
+
+                dgvDados.Rows[index].Cells["Entrada"].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["Entrada"].Value).AddMinutes(diferenca);
+                dgvDados.Rows[index].Cells["IntervaloInicial"].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["IntervaloInicial"].Value).AddMinutes(diferenca);
+                dgvDados.Rows[index].Cells["IntervaloFinal"].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["IntervaloFinal"].Value).AddMinutes(diferenca);
+                dgvDados.Rows[index].Cells["Saida"].Value = Convert.ToDateTime(dgvDados.Rows[index].Cells["Saida"].Value).AddMinutes(diferenca);
+
+                qtde--;
+            }
         }
 
         private void ValidarHorasExtras(int totalHorasExtras, int diasTrabalhados, int valorMax)
@@ -204,7 +237,7 @@ namespace CriadorPlanilhas
 
                         var valorExtra = Convert.ToInt32(dgvDados.Rows[listaDiasAplicados[diaTirarExtra]].Cells["HoraExtraMinutos"].Value);
 
-                        var valorAplicar = new Random().Next(40, valorExtra - 20) ;
+                        var valorAplicar = new Random().Next(40, valorExtra - 20);
 
                         dgvDados.Rows[listaDiasAplicados[diaTirarExtra]].Cells["HoraExtraMinutos"].Value = valorExtra - valorAplicar;
                         dgvDados.Rows[listaDiasAplicados[diaTirarExtra]].Cells["HoraExtra"].Value = TraduzirMinutosTotal(valorExtra - valorAplicar);

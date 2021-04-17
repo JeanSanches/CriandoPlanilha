@@ -13,3 +13,4 @@ D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.cspr
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.csproj.CopyComplete
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.exe
 D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.pdb
+D:\Projetos\CriandoPlanilha\CriadorPlanilhas\obj\x86\Debug\CriadorPlanilhas.csprojAssemblyReference.cache
