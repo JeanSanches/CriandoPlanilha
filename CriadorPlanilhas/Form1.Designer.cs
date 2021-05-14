@@ -50,6 +50,7 @@
             this.HoraExtraMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ParcialTrabalhadoMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TotalTrabalhadoMinutos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Parada = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnExportar = new System.Windows.Forms.Button();
             this.txtHoraExtra = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -69,12 +70,13 @@
             this.label9 = new System.Windows.Forms.Label();
             this.lbTempoExecucao = new System.Windows.Forms.Label();
             this.timerGerarPlanilha = new System.Windows.Forms.Timer(this.components);
+            this.ccbParada = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDados)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGerar
             // 
-            this.btnGerar.Location = new System.Drawing.Point(662, 13);
+            this.btnGerar.Location = new System.Drawing.Point(788, 12);
             this.btnGerar.Name = "btnGerar";
             this.btnGerar.Size = new System.Drawing.Size(124, 34);
             this.btnGerar.TabIndex = 0;
@@ -84,7 +86,7 @@
             // 
             // dtpReferencia
             // 
-            this.dtpReferencia.Location = new System.Drawing.Point(502, 20);
+            this.dtpReferencia.Location = new System.Drawing.Point(597, 17);
             this.dtpReferencia.Name = "dtpReferencia";
             this.dtpReferencia.Size = new System.Drawing.Size(150, 20);
             this.dtpReferencia.TabIndex = 1;
@@ -107,11 +109,12 @@
             this.HoraExtra,
             this.HoraExtraMinutos,
             this.ParcialTrabalhadoMinutos,
-            this.TotalTrabalhadoMinutos});
+            this.TotalTrabalhadoMinutos,
+            this.Parada});
             this.dgvDados.Enabled = false;
             this.dgvDados.Location = new System.Drawing.Point(12, 53);
             this.dgvDados.Name = "dgvDados";
-            this.dgvDados.Size = new System.Drawing.Size(1079, 537);
+            this.dgvDados.Size = new System.Drawing.Size(1177, 537);
             this.dgvDados.TabIndex = 2;
             // 
             // Dia
@@ -199,6 +202,11 @@
             this.TotalTrabalhadoMinutos.HeaderText = "TotalTrabalhadoMinutos";
             this.TotalTrabalhadoMinutos.Name = "TotalTrabalhadoMinutos";
             this.TotalTrabalhadoMinutos.Visible = false;
+            // 
+            // Parada
+            // 
+            this.Parada.HeaderText = "Parada";
+            this.Parada.Name = "Parada";
             // 
             // btnExportar
             // 
@@ -355,11 +363,22 @@
             // 
             this.timerGerarPlanilha.Tick += new System.EventHandler(this.timerGerarPlanilha_Tick);
             // 
+            // ccbParada
+            // 
+            this.ccbParada.AutoSize = true;
+            this.ccbParada.Location = new System.Drawing.Point(501, 20);
+            this.ccbParada.Name = "ccbParada";
+            this.ccbParada.Size = new System.Drawing.Size(60, 17);
+            this.ccbParada.TabIndex = 23;
+            this.ccbParada.Text = "Parada";
+            this.ccbParada.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1103, 689);
+            this.ClientSize = new System.Drawing.Size(1249, 689);
+            this.Controls.Add(this.ccbParada);
             this.Controls.Add(this.lbTempoExecucao);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.txtNomeArquivo);
@@ -426,6 +445,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label lbTempoExecucao;
         private System.Windows.Forms.Timer timerGerarPlanilha;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Parada;
+        private System.Windows.Forms.CheckBox ccbParada;
     }
 }
 

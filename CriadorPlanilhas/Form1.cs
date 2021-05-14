@@ -104,6 +104,7 @@ namespace CriadorPlanilhas
                     dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value = "0";
                     dgvDados.Rows[index].Cells["TempoEspera"].Value = "-";
                     dgvDados.Rows[index].Cells["TempoEsperaMinutos"].Value = "0";
+                    dgvDados.Rows[index].Cells["Parada"].Value = "-";
                 }
                 else
                 {
@@ -114,6 +115,7 @@ namespace CriadorPlanilhas
                     dgvDados.Rows[index].Cells["HoraExtraMinutos"].Value = "0";
                     dgvDados.Rows[index].Cells["TempoEspera"].Value = "-";
                     dgvDados.Rows[index].Cells["TempoEsperaMinutos"].Value = "-";
+                    dgvDados.Rows[index].Cells["Parada"].Value = "-";
                 }
 
                 Thread.Sleep(tempoPausa);
@@ -135,6 +137,18 @@ namespace CriadorPlanilhas
                 btnGerar.Enabled = true;
 
                 return;
+            }
+
+            if (ccbParada.Checked)
+            {
+                var posicaoParada = 0;
+                do
+                {
+                    posicaoParada = new Random().Next(0, dgvDados.Rows.Count);
+
+                } while (dgvDados.Rows[posicaoParada].Cells["Entrada"].Value.ToString().Equals("-"));
+
+                dgvDados.Rows[posicaoParada].Cells["Parada"].Value = "1";
             }
 
             CalcularValoresAleatorios(horasExtrasInformado, "HoraExtra", "HoraExtraMinutos", 1, 120, 120, diasTrabalhados, diaMaximoMes);
@@ -176,7 +190,7 @@ namespace CriadorPlanilhas
         private void AplicarEntraMaisTarde(int diaMaximoMes)
         {
             var qtde = new Random().Next(2) + 1;
-            var diasAplicados = new List<int>(); 
+            var diasAplicados = new List<int>();
 
             while (qtde > 0)
             {
@@ -552,7 +566,8 @@ namespace CriadorPlanilhas
                         diaEscolhido = new Random().Next(1, diaMaximoMes);
 
                         Thread.Sleep(tempoPausa);
-                    } while (dgvDados.Rows[diaEscolhido - 1].Cells["Entrada"].Value.Equals("-"));
+                    } while (dgvDados.Rows[diaEscolhido - 1].Cells["Entrada"].Value.Equals("-")
+                    && ((chaveVisivel.Equals("TempoEspera") && dgvDados.Rows[diaEscolhido - 1].Cells["Parada"].Value.Equals("1")) || chaveVisivel.Equals("HoraExtra")));
 
                     listaDiasSem.Add(diaEscolhido);
 
@@ -609,7 +624,8 @@ namespace CriadorPlanilhas
                         }
                     }
 
-                    if (!dgvDados.Rows[index].Cells["Entrada"].Value.Equals("-") && Convert.ToInt32(dgvDados.Rows[index].Cells[chaveCalculo].Value) < valorMax)
+                    if (!dgvDados.Rows[index].Cells["Entrada"].Value.Equals("-") && Convert.ToInt32(dgvDados.Rows[index].Cells[chaveCalculo].Value) < valorMax
+                         && ((chaveVisivel.Equals("TempoEspera") && dgvDados.Rows[index].Cells["Parada"].Value.Equals("-")) || chaveVisivel.Equals("HoraExtra")))
                     {
                         dgvDados.Rows[index].Cells[chaveCalculo].Value = CalcularValorAleatorio(index, ref totalHoras, chaveCalculo, min, max, valorMax);
                         dgvDados.Rows[index].Cells[chaveVisivel].Value = TraduzirMinutos(index, chaveCalculo);
@@ -693,7 +709,7 @@ namespace CriadorPlanilhas
                 worksheet.Cells.Style.WrapText = true;
                 worksheet.View.ShowGridLines = false;//Remove the grid lines of the sheet
 
-                worksheet.Cells["A1:G1"].Merge = true;
+                worksheet.Cells["A1:H1"].Merge = true;
 
                 DateTime dateValue = new DateTime(dtpReferencia.Value.Year, dtpReferencia.Value.Month, dtpReferencia.Value.Day);
 
@@ -715,9 +731,13 @@ namespace CriadorPlanilhas
 
                 worksheet.Cells[2, 7].Value = "Hora Extra";
                 worksheet.Cells[2, 7].AutoFitColumns(30, 40);
+
+                worksheet.Cells[2, 8].Value = "Parada";
+                worksheet.Cells[2, 8].AutoFitColumns(30, 40);
+
                 var index = 0;
 
-                for (var coluna = 1; coluna <= 7; coluna++)
+                for (var coluna = 1; coluna <= 8; coluna++)
                 {
                     worksheet.Cells[1, coluna].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.FromArgb(191, 191, 191));
                     worksheet.Cells[2, coluna].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.FromArgb(191, 191, 191));
@@ -747,10 +767,16 @@ namespace CriadorPlanilhas
                         {
                             worksheet.Cells[index + 3, 7].Value = dgvDados.Rows[index].Cells["HoraExtra"].Value;
                         }
+
+                        worksheet.Cells[index + 3, 8].Value = "falso";
+                        if (dgvDados.Rows[index].Cells["Parada"].Value.Equals("1"))
+                        {
+                            worksheet.Cells[index + 3, 8].Value = "verdadeiro";
+                        }
                     }
                     else
                     {
-                        using (ExcelRange range = worksheet.Cells[index + 3, 1, index + 3, 7])
+                        using (ExcelRange range = worksheet.Cells[index + 3, 1, index + 3, 8])
                         {
                             range.Style.Font.Bold = true;
                             range.Style.Font.Color.SetColor(Color.White);
@@ -759,14 +785,14 @@ namespace CriadorPlanilhas
                         }
                     }
 
-                    for (var coluna = 1; coluna <= 7; coluna++)
+                    for (var coluna = 1; coluna <= 8; coluna++)
                         worksheet.Cells[index + 3, coluna].Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.FromArgb(191, 191, 191));
                 }
 
                 worksheet.Cells[index + 3, 6].Value = txtTotalHoraEspera.Text;
                 worksheet.Cells[index + 3, 7].Value = txtTotalHoraExtra.Text;
 
-                using (ExcelRange range = worksheet.Cells[1, 1, index + 3, 7])
+                using (ExcelRange range = worksheet.Cells[1, 1, index + 3, 8])
                 {
                     range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
